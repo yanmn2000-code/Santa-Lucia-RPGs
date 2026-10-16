@@ -1,0 +1,20 @@
+SANTA LUCIA — Netlify + Supabase
+
+Conteúdo:
+- index.html: site com autenticação por e-mail e senha (sem verificação de e-mail) ou Google.
+- netlify/functions/config.mjs: lê SUPABASE_URL e SUPABASE_ANON_KEY do ambiente Netlify.
+- netlify.toml: configura a função do Netlify.
+- supabase_setup.sql: tabela privada de estado por usuário e políticas RLS.
+
+CONFIGURAÇÃO:
+1. No Supabase > SQL Editor, execute todo o conteúdo de supabase_setup.sql.
+2. No Supabase > Authentication > URL Configuration, defina Site URL como o domínio publicado do Netlify e adicione o mesmo domínio em Redirect URLs. Para testes locais, adicione a URL local usada.
+3. Para Google: Supabase > Authentication > Sign In / Providers > Google, habilite o provedor e configure o Client ID e Client Secret do Google Cloud. Configure também a callback URL mostrada pelo Supabase no Google Cloud.
+4. No Netlify, mantenha as variáveis SUPABASE_URL e SUPABASE_ANON_KEY (a chave sb_publishable_ é apropriada para o cliente).
+5. Publique o conteúdo desta pasta no repositório/pasta de deploy do Netlify. É necessário que netlify.toml e netlify/functions/config.mjs sejam publicados junto com index.html. Depois faça novo deploy.
+6. Abra o site e teste criar conta com e-mail e senha.
+
+IMPORTANTE / LIMITAÇÃO DESTA ETAPA:
+- A autenticação real é feita pelo Supabase. O estado de fichas/campanhas/rolagens é salvo na nuvem por conta, com RLS.
+- Campanhas compartilhadas entre contas diferentes ainda precisam ser migradas para tabelas relacionais com membros e permissões; o estado por usuário, por si só, não sincroniza uma campanha de um usuário para outro.
+- Não adicione service_role nem sb_secret_ ao site. Nunca desative RLS.
